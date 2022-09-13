@@ -8,7 +8,8 @@ const logger = require('morgan')
 require('./database-connection')
 
 const indexRouter = require('./routes/index')
-const usersRouter = require('./routes/users')
+const bookingsRouter = require('./routes/bookings')
+const bungalowsRouter = require('./routes/bungalows')
 
 const app = express()
 
@@ -23,8 +24,9 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use('/favicon.ico', express.static(path.join(__dirname, 'public', 'images', 'favicon.ico')))
 
+app.use('/bookings', bookingsRouter)
+app.use('/bungalows', bungalowsRouter)
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

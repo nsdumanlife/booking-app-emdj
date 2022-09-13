@@ -1,0 +1,9 @@
+@startuml Bungalow Booking App Activity Diagram
+
+:Book;
+if (Logged in?) then(yes)
+    :Booking form;
+else (no)
+    : Login or\n Signup;
+
+@enduml

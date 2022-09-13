@@ -1,0 +1,20 @@
+@startuml Bungalow Booking Usecase Diagram
+left to right direction
+skinparam actorStyle Hollow
+
+actor "User" as user
+actor "Owner" as owner
+
+package "Bungalow Booking App" {
+    usecase "Book" as uc1
+    usecase "Review" as uc2
+    usecase "Create" as uc3
+}
+
+user --> uc1
+user --> uc2
+uc3 <-- owner
+uc1 <-- owner
+uc2 <-- owner
+
+@enduml
