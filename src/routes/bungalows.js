@@ -25,8 +25,8 @@ router.get('/', async (req, res, next) => {
       return res.redirect(`/bungalows/${bungalow.id}`)
     }
 
-    // res.send(bungalows)
-    return res.render('bungalows', { title: `Rent a Bungalow for Your Next Escape`, bungalows, user })
+    return res.send(bungalows)
+    // return res.render('bungalows', { title: `Rent a Bungalow for Your Next Escape`, bungalows, user })
   } catch (e) {
     return next(e)
   }
@@ -36,15 +36,15 @@ router.get('/:bungalowId', async (req, res, next) => {
   try {
     const bungalow = await Bungalow.findById(req.params.bungalowId)
 
-    // if (bungalow) res.send(bungalow)
-    if (bungalow)
-      res.render('bungalow', {
-        title: `Bungalow ${bungalow.name[0].toUpperCase() + bungalow.name.substring(1)}`,
-        bungalow,
-      })
-    else res.sendStatus(404)
+    if (bungalow) return res.send(bungalow)
+    // if (bungalow)
+    //   res.render('bungalow', {
+    //     title: `Bungalow ${bungalow.name[0].toUpperCase() + bungalow.name.substring(1)}`,
+    //     bungalow,
+    //   })
+    return res.sendStatus(404)
   } catch (e) {
-    next(e)
+    return next(e)
   }
 })
 /* POST/create new booking. */
@@ -70,7 +70,6 @@ router.post('/:bungalowId', async (req, res, next) => {
 router.post('/:bungalowId/reviews', async (req, res, next) => {
   try {
     const bungalow = await Bungalow.findById(req.params.bungalowId)
-    const user = await getLoggedInUser()
 
     if (!bungalow)
       return res.render('error', {
@@ -78,8 +77,10 @@ router.post('/:bungalowId/reviews', async (req, res, next) => {
         message: `No bungalow found`,
       })
 
-    await user.review(bungalow, req.body.text, req.body.rate)
-    return res.redirect(`/bungalows/${bungalow.id}`)
+    const user = await getLoggedInUser()
+    const review = await user.review(bungalow, req.body.text, req.body.rate)
+    return res.send(review)
+    // return res.redirect(`/bungalows/${bungalow.id}`)
   } catch (e) {
     return next(e)
   }
@@ -95,8 +96,8 @@ router.post('/', async (req, res, next) => {
       req.body.capacity,
       req.body.price
     )
-    // res.send(bungalow)
-    return res.redirect(`/bungalows/${bungalow.id}`)
+    return res.send(bungalow)
+    // return res.redirect(`/bungalows/${bungalow.id}`)
   } catch (e) {
     return next(e)
   }
