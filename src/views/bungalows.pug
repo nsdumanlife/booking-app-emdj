@@ -5,14 +5,15 @@ block content
   h2 Here are some lovely bungalows
   each bungalow in bungalows
     .bungalow
+      //- TODO: need to change this endpoint to /bookings
       form(action=`/bungalows/${bungalow.id}`, method='post')
 
         a(href=`/bungalows/${bungalow.id}`)
-          h3 Bungalow #{bungalow.name}
+          h3 Bungalow #{bungalow.name[0].toUpperCase() + bungalow.name.substring(1)}
           h4 #{bungalow.location}
           p #{bungalow.price} TRY
           if bungalow.rating
-            p #{bungalow.rating} stars - #{bungalow.reviews.length} reviews
+            p #{bungalow.rating} star#{bungalow.rating > 1 ? 's' : ''} - #{bungalow.reviews.length} review#{bungalow.reviews.length > 1 ? 's' : ''}
         span Check-in date&nbsp;
         input(type='date' name='checkInDate' value='2022-10-01')
         span Check-out date&nbsp;
