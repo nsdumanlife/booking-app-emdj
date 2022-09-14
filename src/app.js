@@ -10,6 +10,7 @@ require('./database-connection')
 const indexRouter = require('./routes/index')
 const bookingsRouter = require('./routes/bookings')
 const bungalowsRouter = require('./routes/bungalows')
+const usersRouter = require('./routes/users')
 
 const app = express()
 
@@ -26,6 +27,7 @@ app.use('/favicon.ico', express.static(path.join(__dirname, 'public', 'images', 
 
 app.use('/bookings', bookingsRouter)
 app.use('/bungalows', bungalowsRouter)
+app.use('/users', usersRouter)
 app.use('/', indexRouter)
 
 // catch 404 and forward to error handler

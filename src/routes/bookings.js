@@ -1,5 +1,6 @@
 const express = require('express')
 const Booking = require('../models/booking')
+const Bungalow = require('../models/bungalow')
 const getLoggedInUser = require('../models/index')
 
 const router = express.Router()
@@ -9,7 +10,27 @@ router.get('/', async (req, res, next) => {
   try {
     const user = await getLoggedInUser()
 
-    return res.render('bookings', { title: 'Bookings', user, loggedIn: true })
+    return res.send(user.bookings)
+    // return res.render('bookings', { title: 'Bookings', user, loggedIn: true })
+  } catch (e) {
+    return next(e)
+  }
+})
+/* POST/create new booking. */
+router.post('/', async (req, res, next) => {
+  try {
+    const bungalow = await Bungalow.findById(req.body.bungalowId)
+
+    if (!bungalow)
+      return res.render('error', {
+        error: { status: 404 },
+        message: `No bungalow found`,
+      })
+
+    const user = await getLoggedInUser()
+    const booking = await user.book(bungalow, new Date(req.body.checkInDate), new Date(req.body.checkOutDate))
+
+    return res.send(booking)
   } catch (e) {
     return next(e)
   }
