@@ -35,12 +35,6 @@ const userSchema = new mongoose.Schema({
 })
 
 class User {
-  get profile() {
-    return `${this.firstName} ${this.lastName} has ${this.bookings.length} ${
-      this.bookings.length <= 1 ? 'booking' : 'bookings'
-    }`
-  }
-
   async book(bungalow, checkInDate, checkOutDate) {
     if (checkInDate - Date.now() < 0) throw new Error('Enter a valid date for check-in date')
 
@@ -53,22 +47,25 @@ class User {
       await this.save()
       await bungalow.save()
 
+      return newBooking
+
       // TODO:
       // do payment
       // create invoice
       // send confirmation email attached with invoice to user
-    } else {
-      throw new Error('Please select different date')
     }
+    throw new Error('Please select different date')
   }
 
   async review(bungalow, text, rate) {
     const review = await Review.create({ text, rate, author: this })
 
-    bungalow.reviews.push(review)
+    await bungalow.reviews.push(review)
 
     await bungalow.save()
     await this.save()
+
+    return review
   }
 
   async cancelBooking(booking) {
