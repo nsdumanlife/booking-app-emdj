@@ -9,6 +9,12 @@ router.get('/', async (req, res, next) => {
   try {
     const bungalows = await Bungalow.find({})
 
+    if (!bungalows)
+      return res.render('error', {
+        error: { status: 404 },
+        message: `No bungalow found`,
+      })
+
     const user = await getLoggedInUser()
 
     if (req.query.name) {
@@ -42,46 +48,58 @@ router.get('/:bungalowId', async (req, res, next) => {
   }
 })
 /* POST/create new booking. */
-router.post('/:bungalowId', async (req, res) => {
-  const bungalow = await Bungalow.findById(req.params.bungalowId)
+router.post('/:bungalowId', async (req, res, next) => {
+  try {
+    const bungalow = await Bungalow.findById(req.params.bungalowId)
 
-  if (!bungalow)
-    return res.render('error', {
-      error: { status: 404 },
-      message: `No bungalow found`,
-    })
+    if (!bungalow)
+      return res.render('error', {
+        error: { status: 404 },
+        message: `No bungalow found`,
+      })
 
-  const user = await getLoggedInUser()
-  await user.book(bungalow, new Date(req.body.checkInDate), new Date(req.body.checkOutDate))
+    const user = await getLoggedInUser()
+    await user.book(bungalow, new Date(req.body.checkInDate), new Date(req.body.checkOutDate))
 
-  return res.redirect('/bookings')
+    return res.redirect('/bookings')
+  } catch (e) {
+    return next(e)
+  }
 })
 /* POST/create new review. */
-router.post('/:bungalowId/reviews', async (req, res) => {
-  const bungalow = await Bungalow.findById(req.params.bungalowId)
-  const user = await getLoggedInUser()
+router.post('/:bungalowId/reviews', async (req, res, next) => {
+  try {
+    const bungalow = await Bungalow.findById(req.params.bungalowId)
+    const user = await getLoggedInUser()
 
-  if (!bungalow)
-    return res.render('error', {
-      error: { status: 404 },
-      message: `No bungalow found`,
-    })
+    if (!bungalow)
+      return res.render('error', {
+        error: { status: 404 },
+        message: `No bungalow found`,
+      })
 
-  await user.review(bungalow, req.body.text, req.body.rate)
-  return res.redirect(`/bungalows/${bungalow.id}`)
+    await user.review(bungalow, req.body.text, req.body.rate)
+    return res.redirect(`/bungalows/${bungalow.id}`)
+  } catch (e) {
+    return next(e)
+  }
 })
 /* POST/create new bungalow */
-router.post('/', async (req, res) => {
-  const user = await getLoggedInUser()
+router.post('/', async (req, res, next) => {
+  try {
+    const user = await getLoggedInUser()
 
-  const bungalow = await user.createBungalow(
-    req.body.name.toLowerCase(),
-    req.body.location.toLowerCase(),
-    req.body.capacity,
-    req.body.price
-  )
-
-  return res.redirect(`/bungalows/${bungalow.id}`)
+    const bungalow = await user.createBungalow(
+      req.body.name.toLowerCase(),
+      req.body.location.toLowerCase(),
+      req.body.capacity,
+      req.body.price
+    )
+    // res.send(bungalow)
+    return res.redirect(`/bungalows/${bungalow.id}`)
+  } catch (e) {
+    return next(e)
+  }
 })
 
 module.exports = router
