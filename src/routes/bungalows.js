@@ -47,25 +47,7 @@ router.get('/:bungalowId', async (req, res, next) => {
     return next(e)
   }
 })
-/* POST/create new booking. */
-router.post('/:bungalowId', async (req, res, next) => {
-  try {
-    const bungalow = await Bungalow.findById(req.params.bungalowId)
 
-    if (!bungalow)
-      return res.render('error', {
-        error: { status: 404 },
-        message: `No bungalow found`,
-      })
-
-    const user = await getLoggedInUser()
-    await user.book(bungalow, new Date(req.body.checkInDate), new Date(req.body.checkOutDate))
-
-    return res.redirect('/bookings')
-  } catch (e) {
-    return next(e)
-  }
-})
 /* POST/create new review. */
 router.post('/:bungalowId/reviews', async (req, res, next) => {
   try {
