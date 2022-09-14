@@ -10,7 +10,8 @@ router.get('/', async (req, res, next) => {
   try {
     const user = await getLoggedInUser()
 
-    return res.render('bookings', { title: 'Bookings', user, loggedIn: true })
+    return res.send(user.bookings)
+    // return res.render('bookings', { title: 'Bookings', user, loggedIn: true })
   } catch (e) {
     return next(e)
   }
