@@ -6,7 +6,7 @@ block content
   each bungalow in bungalows
     .bungalow
       //- TODO: need to change this endpoint to /bookings
-      form(action=`/bungalows/${bungalow.id}`, method='post')
+      form(action=`/bookings`, method='post')
 
         a(href=`/bungalows/${bungalow.id}`)
           h3 Bungalow #{bungalow.name[0].toUpperCase() + bungalow.name.substring(1)}
@@ -19,3 +19,4 @@ block content
         span Check-out date&nbsp;
         input(type='date' name='checkOutDate' value='2022-11-01')
         input(type="submit", value="Book now")
+        input(type="hidden", name="bungalowId", id='bungalowId', value=`${bungalow.id}`)
