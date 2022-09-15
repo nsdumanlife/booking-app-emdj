@@ -77,7 +77,7 @@ async function main() {
   // // console.log(numan)
 }
 
-main()
+// main()
 
 module.exports = async function getLoggedInUser() {
   const loggedInUser = await User.findOne({ firstName: 'Numan' })
