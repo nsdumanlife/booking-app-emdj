@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 // eslint-disable-next-line prefer-const
 let connectionString = process.env.MONGODB_CONNECTION_STRING || 'mongodb://localhost:27017'
 
-mongoose.set('debug', true)
+// mongoose.set('debug', true)
 
 mongoose
   .connect(connectionString, {
