@@ -2,57 +2,60 @@ const mongoose = require('mongoose')
 const autopopulate = require('mongoose-autopopulate')
 const getDays = require('../helper/get-booking-days')
 
-const bungalowSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  location: {
-    type: String,
-    required: true,
-  },
-  capacity: {
-    type: Number,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-  },
-  bookings: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Booking',
-      autopopulate: { maxDepth: 2 },
+const bungalowSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-  ],
-  bookedDates: [],
-  reviews: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Review',
-      autopopulate: { maxDepth: 2 },
+    location: {
+      type: String,
+      required: true,
     },
-  ],
-  images: [
-    {
+    capacity: {
+      type: Number,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+    },
+    bookings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Booking',
+        autopopulate: { maxDepth: 2 },
+      },
+    ],
+    bookedDates: [],
+    reviews: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Review',
+        autopopulate: { maxDepth: 2 },
+      },
+    ],
+    images: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Image',
+        autopopulate: { maxDepth: 1 },
+      },
+    ],
+    services: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Service',
+      },
+    ],
+    owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Image',
+      ref: 'User',
       autopopulate: { maxDepth: 1 },
     },
-  ],
-  services: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Service',
-    },
-  ],
-  owner: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    autopopulate: { maxDepth: 1 },
   },
-})
+  { toJSON: { virtuals: true } }
+)
 class Bungalow {
   get rating() {
     const sumOfReviewsRates = this.reviews.reduce((sum, review) => sum + Number(review.rate), 0)
