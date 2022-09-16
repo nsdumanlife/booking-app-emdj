@@ -42,6 +42,13 @@ describe('bookings endpoint', () => {
     // booking does not include createdUser because it takes loggedInUser in user.book
     const createdBooking = bookingRequest.body
 
+    // // new booking for unavailable dates
+    // const unvalidBookingRequest = await request(app)
+    //   .post(`/bookings`)
+    //   .send({ guest: createdUser, bungalowId: createdBungalow._id, checkInDate, checkOutDate })
+    // const createdUnvalidBooking = unvalidBookingRequest.body
+
+    // expect(createdUnvalidBooking).toThrow('Please select different date')
     expect(createdBooking.totalPrice).toBe(2500)
     expect(createdBooking.status).toBe('Upcoming')
   })
