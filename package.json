@@ -11,7 +11,7 @@
     "eslint:fix": "npx eslint --fix .",
     "lint": "lint-staged",
     "prepare": "husky install",
-    "test": "jest --testEnvironment=node --verbose --forceExit --maxWorkers=1",
+    "test": "jest --verbose --forceExit",
     "test-watch": "jest --testEnvironment=node --verbose --forceExit --watchAll --maxWorkers=1",
     "test-coverage": "jest --collect-coverage --testEnvironment=node --forceExit --maxWorkers=1"
   },
@@ -41,6 +41,7 @@
     "pug": "^3.0.2"
   },
   "devDependencies": {
+    "@shelf/jest-mongodb": "^4.1.0",
     "eslint": "^8.19.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^8.5.0",

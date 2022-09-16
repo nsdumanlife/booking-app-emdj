@@ -14,34 +14,26 @@ describe('getDuration function', () => {
     const startDate = '09/13/2022'
     const endDate = '09/15/2022'
 
-    // const result = getDuration(startDate, endDate)
-
     expect(() => getDuration(startDate, endDate)).toThrow(TypeError)
   })
 
   test('if startDate > endDate it should throw error', () => {
-    const startDate = '09/17/2022'
-    const endDate = '09/15/2022'
+    const startDate = new Date('09/15/2022')
+    const endDate = new Date('09/13/2022')
 
-    // const result = getDuration(startDate, endDate)
-
-    expect(() => getDuration(startDate, endDate)).toThrow(Error)
+    expect(() => getDuration(startDate, endDate)).toThrow('Dates are invalid.')
   })
 
   test('if startDate is invalid date should throw error', () => {
     const startDate = '09/54/2022'
-    const endDate = '09/15/2022'
+    const endDate = new Date('09/15/2022')
 
-    // const result = getDuration(startDate, endDate)
-
-    expect(() => getDuration(startDate, endDate)).toThrow(Error)
+    expect(() => getDuration(startDate, endDate)).toThrow(TypeError)
   })
 
   test('if endDate is invalid date should throw error', () => {
-    const startDate = '09/15/2022'
+    const startDate = new Date('09/15/2022')
     const endDate = '09/54/2022'
-
-    // const result = getDuration(startDate, endDate)
 
     expect(() => getDuration(startDate, endDate)).toThrow(Error)
   })

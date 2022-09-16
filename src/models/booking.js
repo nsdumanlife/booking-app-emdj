@@ -2,22 +2,25 @@ const mongoose = require('mongoose')
 const autopopulate = require('mongoose-autopopulate')
 const getDays = require('../helper/get-booking-days')
 
-const bookingSchema = new mongoose.Schema({
-  guest: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    autopopulate: { maxDepth: 1 },
+const bookingSchema = new mongoose.Schema(
+  {
+    guest: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      autopopulate: { maxDepth: 1 },
+    },
+    bungalow: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Bungalow',
+      autopopulate: { maxDepth: 1 },
+    },
+    checkInDate: Date,
+    checkOutDate: Date,
+    isReviewed: Boolean,
+    cancelled: Boolean,
   },
-  bungalow: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Bungalow',
-    autopopulate: { maxDepth: 1 },
-  },
-  checkInDate: Date,
-  checkOutDate: Date,
-  isReviewed: Boolean,
-  cancelled: Boolean,
-})
+  { toJSON: { virtuals: true } }
+)
 
 class Booking {
   get bookingDays() {

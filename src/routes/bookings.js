@@ -21,11 +21,11 @@ router.post('/', async (req, res, next) => {
   try {
     const bungalow = await Bungalow.findById(req.body.bungalowId)
 
-    if (!bungalow)
-      return res.render('error', {
-        error: { status: 404 },
-        message: `No bungalow found`,
-      })
+    if (!bungalow) throw new Error('No bungalow found')
+    // return res.render('error', {
+    //   error: { status: 404 },
+    //   message: `No bungalow found`,
+    // })
 
     const user = await getLoggedInUser()
     const booking = await user.book(bungalow, new Date(req.body.checkInDate), new Date(req.body.checkOutDate))

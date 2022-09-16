@@ -1,9 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 const request = require('supertest')
 const app = require('../src/app')
 
 describe('Bungalows endpoints', () => {
-  // To use this test, first need to change res.render to res.send in bungalows.js line:28-29
-
   it('get request to /bungalows should list bungalows', async () => {
     const bungalowList = (await request(app).get('/bungalows')).body
 
@@ -12,11 +11,22 @@ describe('Bungalows endpoints', () => {
     expect(bungalowsExist).toBe(true)
   })
 
-  // #it#('get request to /bungalows should list bungalows', async () => {
-  //   const response = await request(app).get('/bungalows')
+  it('get name query request to /bungalows should show bungalow', async () => {
+    // create bungalow
+    const bungalowToCreate = {
+      name: 'namequery',
+      location: 'query',
+      capacity: 2,
+      price: 2000,
+    }
 
-  //   expect(response.status).toBe(200)
-  // })
+    const bungalowRequest = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
+    const createdBungalow = bungalowRequest.body
+    console.log(createdBungalow)
+    const bungalow = (await request(app).get(`/bungalows?name=${createdBungalow.name}`)).body
+
+    expect(bungalow).toMatchObject(bungalowToCreate)
+  })
 
   it('get request to /bungalows/:bungalowId should return bungalow', async () => {
     // create bungalow
@@ -27,11 +37,10 @@ describe('Bungalows endpoints', () => {
       price: 1250,
     }
 
-    const bungalowResponse = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
-    const createdBungalow = bungalowResponse.body
-    // find bungalow id by searching it's name
+    const bungalowRequest = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
+    const createdBungalow = bungalowRequest.body
 
-    const response = await request(app).get(`/bungalows/${createdBungalow.id}`).expect(200)
+    const response = await request(app).get(`/bungalows/${createdBungalow._id}`).expect(200)
 
     expect(response.body).toMatchObject(bungalowToCreate)
   })
@@ -44,14 +53,14 @@ describe('Bungalows endpoints', () => {
       price: 1250,
     }
 
-    const bungalowResponse = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
-    const createdBungalow = bungalowResponse.body
+    const bungalowRequest = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
+    const createdBungalow = bungalowRequest.body
 
     expect(createdBungalow).toMatchObject(bungalowToCreate)
-    // expect(createdBungalow.name).toBe(bungalowToCreate.name)
-    // expect(createdBungalow.location).toBe(bungalowToCreate.location)
-    // expect(createdBungalow.capacity).toBe(bungalowToCreate.capacity)
-    // expect(createdBungalow.price).toBe(bungalowToCreate.price)
+    expect(createdBungalow.name).toBe(bungalowToCreate.name)
+    expect(createdBungalow.location).toBe(bungalowToCreate.location)
+    expect(createdBungalow.capacity).toBe(bungalowToCreate.capacity)
+    expect(createdBungalow.price).toBe(bungalowToCreate.price)
   })
 
   it('create a new review', async () => {
@@ -67,13 +76,11 @@ describe('Bungalows endpoints', () => {
       rate: 3,
     }
 
-    const bungalowResponse = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
-    const createdBungalow = bungalowResponse.body
-    console.log('====bungalow===', createdBungalow)
+    const bungalowRequest = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
+    const createdBungalow = bungalowRequest.body
 
-    const reviewResponse = await request(app).post(`/bungalows/${createdBungalow.id}/reviews`).send(reviewToCreate)
-    const createdReview = reviewResponse.body
-    console.log('====review===', createdReview)
+    const reviewRequest = await request(app).post(`/bungalows/${createdBungalow._id}/reviews`).send(reviewToCreate)
+    const createdReview = reviewRequest.body
 
     expect(createdReview).toMatchObject(reviewToCreate)
   })

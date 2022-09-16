@@ -21,8 +21,8 @@ router.get('/', async (req, res, next) => {
       const bungalow = await Bungalow.findOne({
         name: `${req.query.name.toLowerCase()}`,
       })
-
-      return res.redirect(`/bungalows/${bungalow.id}`)
+      return res.send(bungalow)
+      // return res.redirect(`/bungalows/${bungalow.id}`)
     }
 
     return res.send(bungalows)
