@@ -11,6 +11,23 @@ describe('Bungalows endpoints', () => {
     expect(bungalowsExist).toBe(true)
   })
 
+  it('get name query request to /bungalows should show bungalow', async () => {
+    // create bungalow
+    const bungalowToCreate = {
+      name: 'namequery',
+      location: 'query',
+      capacity: 2,
+      price: 2000,
+    }
+
+    const bungalowRequest = await request(app).post('/bungalows').send(bungalowToCreate).expect(200)
+    const createdBungalow = bungalowRequest.body
+    console.log(createdBungalow)
+    const bungalow = (await request(app).get(`/bungalows?name=${createdBungalow.name}`)).body
+
+    expect(bungalow).toMatchObject(bungalowToCreate)
+  })
+
   it('get request to /bungalows/:bungalowId should return bungalow', async () => {
     // create bungalow
     const bungalowToCreate = {
